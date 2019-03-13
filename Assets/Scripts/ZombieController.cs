@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class ZombieController : MonoBehaviour
 {
-    private Vector3 targetDirection;
     public float forwardSpeed;
     public float rotationSpeed;
+    
+    private Vector3 targetDirection;
+    private List<Transform> congaLine = new List<Transform>();
 
     [SerializeField]
     private PolygonCollider2D[] colliders;
@@ -49,7 +52,6 @@ public class ZombieController : MonoBehaviour
                                             Quaternion.Euler(0, 0, targetAngleDeg),
                                             rotationSpeed * Time.deltaTime
                                             );
-
         EnforceBounds();
     }
 
@@ -64,14 +66,17 @@ public class ZombieController : MonoBehaviour
     {
         if (collision.CompareTag("cat"))
         {
-            Debug.Log("Oops. Stepped on a cat.");
+            Transform targetToFollow = congaLine.Count == 0 ? 
+                                        transform : congaLine[congaLine.Count-1];
+
+            collision.GetComponent<CatController>().JoinConga(targetToFollow, forwardSpeed, rotationSpeed); ;
+            congaLine.Add(collision.transform);
         } 
 
         if (collision.CompareTag("enemy"))
         {
             Debug.Log("Pardon me, ma'am");
         }
-
     }
 
     private void EnforceBounds()
