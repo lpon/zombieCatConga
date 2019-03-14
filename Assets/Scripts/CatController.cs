@@ -51,12 +51,12 @@ public class CatController : MonoBehaviour
         this.forwardSpeed = forwardSpeed * 2f;
         this.rotationSpeed = rotationSpeed;
 
+        isZombie = true;
 
         Transform cat = transform.GetChild(0);
         cat.GetComponent<Collider2D>().enabled = false;
         cat.GetComponent<Animator>().SetBool("inConga", true);
 
-        isZombie = true;
     }
 
     public void ExitConga()

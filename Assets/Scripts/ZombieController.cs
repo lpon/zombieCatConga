@@ -70,22 +70,22 @@ public class ZombieController : MonoBehaviour
         {
             Transform targetToFollow = congaLine.Count == 0 ? 
                                         transform : congaLine[congaLine.Count-1];
-               
+
             collision.transform.parent.GetComponent<CatController>().
                         JoinConga(targetToFollow, forwardSpeed, rotationSpeed);
 
             congaLine.Add(collision.transform);
-        } 
+        }
 
         else if (collision.CompareTag("enemy"))
         {
-            for (int i = 0; i < 2 && congaLine.Count > 0; i++)
-            {
-                int lastIndex = congaLine.Count - 1;
-                Transform cat = congaLine[lastIndex];
-                congaLine.RemoveAt(lastIndex);
-                cat.parent.GetComponent<CatController>().ExitConga();
-            }
+            //for (int i = 0; i < 2 && congaLine.Count > 0; i++)
+            //{
+            //    int lastIndex = congaLine.Count - 1;
+            //    Transform cat = congaLine[lastIndex];
+            //    congaLine.RemoveAt(lastIndex);
+            //    cat.parent.GetComponent<CatController>().ExitConga();
+            //}
         }
     }
 
