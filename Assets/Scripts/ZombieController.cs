@@ -8,6 +8,8 @@ public class ZombieController : MonoBehaviour
     
     private Vector3 targetDirection;
     private List<Transform> congaLine = new List<Transform>();
+    private bool isInvicible = false;
+    private float timeSpentInvinsible;
 
     [SerializeField]
     private PolygonCollider2D[] colliders;
@@ -68,14 +70,22 @@ public class ZombieController : MonoBehaviour
         {
             Transform targetToFollow = congaLine.Count == 0 ? 
                                         transform : congaLine[congaLine.Count-1];
+               
+            collision.transform.parent.GetComponent<CatController>().
+                        JoinConga(targetToFollow, forwardSpeed, rotationSpeed);
 
-            collision.GetComponent<CatController>().JoinConga(targetToFollow, forwardSpeed, rotationSpeed); ;
             congaLine.Add(collision.transform);
         } 
 
-        if (collision.CompareTag("enemy"))
+        else if (collision.CompareTag("enemy"))
         {
-            Debug.Log("Pardon me, ma'am");
+            for (int i = 0; i < 2 && congaLine.Count > 0; i++)
+            {
+                int lastIndex = congaLine.Count - 1;
+                Transform cat = congaLine[lastIndex];
+                congaLine.RemoveAt(lastIndex);
+                cat.parent.GetComponent<CatController>().ExitConga();
+            }
         }
     }
 

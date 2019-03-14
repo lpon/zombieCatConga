@@ -2,14 +2,11 @@
 
 public class CatController : MonoBehaviour
 {
-    public Collider2D collisionDetection;
-
     private Vector3 positionOfTarget;
     private Transform targetToFollow;
     private float forwardSpeed;
     private float rotationSpeed;
     private bool isZombie;
-
 
     private void Update()
     {
@@ -54,23 +51,37 @@ public class CatController : MonoBehaviour
         this.forwardSpeed = forwardSpeed * 2f;
         this.rotationSpeed = rotationSpeed;
 
-        isZombie = true;
 
-        collisionDetection.enabled = false;
-        GetComponent<Animator>().SetBool("inConga", true);
+        Transform cat = transform.GetChild(0);
+        cat.GetComponent<Collider2D>().enabled = false;
+        cat.GetComponent<Animator>().SetBool("inConga", true);
+
+        isZombie = true;
     }
 
-    void UpdateTargetPosition()
+    public void ExitConga()
+    {
+   
+        Vector3 cameraPosition = Camera.main.transform.position;
+        positionOfTarget = new Vector3(cameraPosition.x + Random.Range(-1.5f, 1.5f),
+                                       cameraPosition.y + Random.Range(-1.5f, 1.5f),
+                                       targetToFollow.position.z);
+        
+        Transform cat = transform.GetChild(0);
+        cat.GetComponent<Animator>().SetBool("inConga", false);
+    }
+
+    public void UpdateTargetPosition()
     {
         this.positionOfTarget = this.targetToFollow.position;
     }
 
-    void DestroyCatGameObject()
+    public void DestroyCatGameObject()
     {
         Destroy(gameObject);
     }
 
-    private void OnBecameInvisible()
+    public void OnBecameInvisible()
     {
         if (!isZombie)
         {
