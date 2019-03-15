@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ZombieController : MonoBehaviour
 {
@@ -8,16 +9,19 @@ public class ZombieController : MonoBehaviour
     
     private Vector3 targetDirection;
     private List<Transform> congaLine = new List<Transform>();
-    private bool isInvicible = false;
-    private float timeSpentInvinsible;
+    private bool isInvincible = false;
+    private float timeSpentInvincible;
+    private int lives = 3;
 
     [SerializeField]
     private PolygonCollider2D[] colliders;
     private int currentColliderIndex = 0;
+    private Renderer spriteRenderer;
 
     private void Start()
     {
         targetDirection = Vector3.right;
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -55,6 +59,28 @@ public class ZombieController : MonoBehaviour
                                             rotationSpeed * Time.deltaTime
                                             );
         EnforceBounds();
+
+        RenderInvincibilityEffects();
+    }
+
+    void RenderInvincibilityEffects()
+    {
+        if (isInvincible)
+        {
+            timeSpentInvincible += Time.deltaTime;
+
+            if (timeSpentInvincible < 3f)
+            {
+                float remainder = timeSpentInvincible % .3f;
+                spriteRenderer.enabled = remainder > .15f;
+            }
+            else
+            {
+                spriteRenderer.enabled = true;
+                isInvincible = false;
+            }
+        }
+
     }
 
     public void SetColliderForSprite(int spriteNum)
@@ -68,24 +94,38 @@ public class ZombieController : MonoBehaviour
     {
         if (collision.CompareTag("cat"))
         {
-            Transform targetToFollow = congaLine.Count == 0 ? 
-                                        transform : congaLine[congaLine.Count-1];
+            Transform targetToFollow = congaLine.Count == 0 ?
+                                        transform : congaLine[congaLine.Count - 1];
 
             collision.transform.parent.GetComponent<CatController>().
                         JoinConga(targetToFollow, forwardSpeed, rotationSpeed);
 
             congaLine.Add(collision.transform);
+
+            // Winning Case
+            if (congaLine.Count >= 5)
+            {
+                SceneManager.LoadScene("WinScene");
+            }
         }
 
-        else if (collision.CompareTag("enemy"))
+        else if (!isInvincible && collision.CompareTag("enemy"))
         {
-            //for (int i = 0; i < 2 && congaLine.Count > 0; i++)
-            //{
-            //    int lastIndex = congaLine.Count - 1;
-            //    Transform cat = congaLine[lastIndex];
-            //    congaLine.RemoveAt(lastIndex);
-            //    cat.parent.GetComponent<CatController>().ExitConga();
-            //}
+            isInvincible = true;
+            timeSpentInvincible = 0;
+   
+            for (int i = 0; i < 2 && congaLine.Count > 0; i++)
+            {
+                int lastIndex = congaLine.Count - 1;
+                Transform cat = congaLine[lastIndex];
+                congaLine.RemoveAt(lastIndex);
+                cat.parent.GetComponent<CatController>().ExitConga();
+            }
+            // Losing Case
+            if (--lives <= 0)
+            {
+                SceneManager.LoadScene("LoseScene");
+            }
         }
     }
 

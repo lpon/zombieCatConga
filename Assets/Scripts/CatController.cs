@@ -61,7 +61,6 @@ public class CatController : MonoBehaviour
 
     public void ExitConga()
     {
-   
         Vector3 cameraPosition = Camera.main.transform.position;
         positionOfTarget = new Vector3(cameraPosition.x + Random.Range(-1.5f, 1.5f),
                                        cameraPosition.y + Random.Range(-1.5f, 1.5f),
@@ -73,7 +72,7 @@ public class CatController : MonoBehaviour
 
     public void UpdateTargetPosition()
     {
-        this.positionOfTarget = this.targetToFollow.position;
+        positionOfTarget = targetToFollow.position;
     }
 
     public void DestroyCatGameObject()
