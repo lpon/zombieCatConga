@@ -9,14 +9,15 @@ public class ScoreCounter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        score.text = "0";
+        score.text = "0" + "/" + zombieController.winningCount.ToString();
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        score.text = zombieController.GetCongaLineCount().ToString();
+        score.text = zombieController.GetCongaLineCount().ToString() + 
+                        "/" + zombieController.winningCount.ToString();
         
     }
 }

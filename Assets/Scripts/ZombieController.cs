@@ -73,6 +73,11 @@ public class ZombieController : MonoBehaviour
         return congaLine.Count;
     }
 
+    public int GetLives()
+    {
+        return lives;
+    }
+
     void RenderInvincibilityEffects()
     {
         if (isInvincible)
