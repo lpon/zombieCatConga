@@ -6,6 +6,10 @@ public class ZombieController : MonoBehaviour
 {
     public float forwardSpeed;
     public float rotationSpeed;
+    public AudioSource audioSource;
+    public AudioClip catCollisionSound;
+    public AudioClip enemyCollisionSound;
+
     
     private Vector3 targetDirection;
     private List<Transform> congaLine = new List<Transform>();
@@ -94,6 +98,8 @@ public class ZombieController : MonoBehaviour
     {
         if (collision.CompareTag("cat"))
         {
+            audioSource.PlayOneShot(catCollisionSound);
+
             Transform targetToFollow = congaLine.Count == 0 ?
                                         transform : congaLine[congaLine.Count - 1];
 
@@ -111,6 +117,8 @@ public class ZombieController : MonoBehaviour
 
         else if (!isInvincible && collision.CompareTag("enemy"))
         {
+            audioSource.PlayOneShot(enemyCollisionSound);
+
             isInvincible = true;
             timeSpentInvincible = 0;
    
