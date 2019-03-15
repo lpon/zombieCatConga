@@ -9,6 +9,7 @@ public class ZombieController : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip catCollisionSound;
     public AudioClip enemyCollisionSound;
+    public int winningCount;
 
     
     private Vector3 targetDirection;
@@ -67,6 +68,11 @@ public class ZombieController : MonoBehaviour
         RenderInvincibilityEffects();
     }
 
+    public int GetCongaLineCount()
+    {
+        return congaLine.Count;
+    }
+
     void RenderInvincibilityEffects()
     {
         if (isInvincible)
@@ -109,7 +115,7 @@ public class ZombieController : MonoBehaviour
             congaLine.Add(collision.transform);
 
             // Winning Case
-            if (congaLine.Count >= 5)
+            if (congaLine.Count >= winningCount)
             {
                 SceneManager.LoadScene("WinScene");
             }
