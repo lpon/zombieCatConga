@@ -12,7 +12,6 @@ public class HeartController : MonoBehaviour
     void Start()
     {
         zombieController = GameObject.Find("Zombie").transform.GetComponent<ZombieController>();
-        Debug.Log(zombieController);
 
         heart0.GetComponent<SpriteRenderer>().enabled = true;
         heart1.GetComponent<SpriteRenderer>().enabled = true;
@@ -23,7 +22,6 @@ public class HeartController : MonoBehaviour
     void Update()
     {
         int currentLives = zombieController.GetLives();
-        Debug.Log(currentLives);
 
         if (currentLives == 2)
         {
